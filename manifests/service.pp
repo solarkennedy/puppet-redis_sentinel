@@ -4,12 +4,12 @@
 # It ensure the service is running
 #
 class redis_sentinel::service {
-  include redis_sentinel::params
 
-  service { $redis_sentinel::params::service_name:
-    ensure     => running,
-    enable     => true,
+  service { $redis_sentinel::service_name:
+    ensure     => $redis_sentinel::service_ensure,
+    enable     => $redis_sentinel::service_ensure,
     hasstatus  => true,
     hasrestart => true,
   }
+
 }
