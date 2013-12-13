@@ -23,6 +23,7 @@ confused with [Redis Cluster](http://redis.io/topics/cluster-spec).
 ##Usage Examples
 
 A simple usage of a single monitor:
+
     include redis_sentinel
     redis_sentinel::monitor { 'mymaster':
       host                    => '127.0.0.1',
@@ -35,6 +36,7 @@ A simple usage of a single monitor:
     }
 
 A complex example with an array of redis servers using quorum:
+
     include redis_sentinel
     $redis_servers = [ 'redis1', 'redis2', 'redis3' ]
     redis_sentinel::monitor { $redis_servers:
@@ -55,8 +57,8 @@ A complex example with an array of redis servers using quorum:
 
 ##Requirements
 
-* Puppetlabs/stdlib
-* Puppetlabs/concat
+* [Puppetlabs/stdlib](https://github.com/puppetlabs/puppetlabs-stdlib)
+* [Puppetlabs/concat](https://github.com/puppetlabs/puppetlabs-concat)
 
 ##Development
 Open an [issue](https://github.com/solarkennedy/puppet-redis_sentinel/issues) or 
