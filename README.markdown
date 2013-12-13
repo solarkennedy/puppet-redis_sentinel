@@ -27,6 +27,11 @@ confused with [Redis Cluster](http://redis.io/topics/cluster-spec).
 * Only Supports Redis 2.6.x
 * Requires Redis to be installed via another module.
 
+##Requirements
+
+* Puppetlabs/stdlib
+* Puppetlabs/concat
+
 ##Development
 Open an [issue](https://github.com/solarkennedy/puppet-redis_sentinel/issues) or 
 [fork](https://github.com/solarkennedy/puppet-redis_sentinel/fork) and open a 

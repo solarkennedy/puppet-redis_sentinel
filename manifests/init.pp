@@ -8,12 +8,18 @@
 #   Explanation of what this parameter affects and what it defaults to.
 #
 class redis_sentinel (
-) inherits redis_sentinel::params {
+  $ensure         = 'present',
+  $config_file    = '/etc/redis-sentinel.conf',
+  $service_name   = 'redis-sentinel',
+  $service_ensure = 'running',
+  $service_enable = true,
+) {
 
-  # validate parameters here
+  validate_bool($service_enable)
 
   class { 'redis_sentinel::install': } ->
   class { 'redis_sentinel::config': } ~>
   class { 'redis_sentinel::service': } ->
   Class['redis_sentinel']
+
 }
