@@ -21,6 +21,7 @@ define redis_sentinel::monitor (
   $parallel_syncs          = '5',
 ) {
 
+  include redis_sentinel
   concat::fragment { "redis_sentinel_${name}":
     ensure  => $ensure,
     target  => $redis_sentinel::config_file,
