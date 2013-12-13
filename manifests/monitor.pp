@@ -12,7 +12,7 @@
 # 
 define redis_sentinel::monitor (
   $ensure                  = 'present',
-  $address                 = '127.0.0.1',
+  $host                    = $name,
   $port                    = '6379',
   $quorum                  = '2',
   $down_after_milliseconds = '6000',
