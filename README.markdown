@@ -24,28 +24,32 @@ confused with [Redis Cluster](http://redis.io/topics/cluster-spec).
 
 A simple usage of a single monitor:
 
-    include redis_sentinel
-    redis_sentinel::monitor { 'mymaster':
-      host                    => '127.0.0.1',
-      port                    => '6379',
-      quorum                  => '2',
-      down_after_milliseconds => '60000',
-      failover_timeout        => '900000',
-      can_failover            => 'yes',
-      parallel_syncs          => '1',
-    }
+```puppet
+include redis_sentinel
+redis_sentinel::monitor { 'mymaster':
+  host                    => '127.0.0.1',
+  port                    => '6379',
+  quorum                  => '2',
+  down_after_milliseconds => '60000',
+  failover_timeout        => '900000',
+  can_failover            => 'yes',
+  parallel_syncs          => '1',
+}
+```
 
 A complex example with an array of redis servers using quorum:
 
-    include redis_sentinel
-    $redis_servers = [ 'redis1', 'redis2', 'redis3' ]
-    redis_sentinel::monitor { $redis_servers:
-      quorum                  => size($redis_servers) / 2 + 1,
-      down_after_milliseconds => '60000',
-      failover_timeout        => '900000',
-      can_failover            => 'yes',
-      parallel_syncs          => size($redis_servers),
-    }
+```puppet
+include redis_sentinel
+$redis_servers = [ 'redis1', 'redis2', 'redis3' ]
+redis_sentinel::monitor { $redis_servers:
+  quorum                  => size($redis_servers) / 2 + 1,
+  down_after_milliseconds => '60000',
+  failover_timeout        => '900000',
+  can_failover            => 'yes',
+  parallel_syncs          => size($redis_servers),
+}
+```
 
 ##Limitations
 
