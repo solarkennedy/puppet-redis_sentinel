@@ -1,0 +1,10 @@
+name          'KyleAnderson/redis_sentinel'
+version       '0.0.1'
+source        'https://github.com/solarkennedy/puppet-redis_sentinel'
+author        'Kyle Anderson <kyle@xkyle.com>'
+license       'Apache License, Version 2.0'
+summary       'UNKNOWN'
+description   'UNKNOWN'
+project_page  'https://github.com/solarkennedy/puppet-redis_sentinel'
+
+dependency 'puppetlabs/stdlib'
