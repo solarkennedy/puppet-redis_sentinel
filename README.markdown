@@ -10,7 +10,7 @@ know how to handle.
 
 This puppet module configures the [Redis Sentinel](http://redis.io/topics/sentinel)
 to do automatic master/slave control on a bunch of redis servers. (not to be 
-confused with [Redis Cluster](http://redis.io/topics/cluster-spec).
+confused with [Redis Cluster](http://redis.io/topics/cluster-spec).)
 
 ##Installation
 
