@@ -13,6 +13,8 @@ class redis_sentinel (
   $service_name   = 'redis-sentinel',
   $service_ensure = 'running',
   $service_enable = true,
+  $user           = 'redis',
+  $group          = 'redis',
 ) {
 
   validate_bool($service_enable)
