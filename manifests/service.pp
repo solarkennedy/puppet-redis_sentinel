@@ -7,7 +7,7 @@ class redis_sentinel::service {
 
   service { $redis_sentinel::service_name:
     ensure     => $redis_sentinel::service_ensure,
-    enable     => $redis_sentinel::service_ensure,
+    enable     => $redis_sentinel::service_enable,
     hasstatus  => true,
     hasrestart => true,
   }
