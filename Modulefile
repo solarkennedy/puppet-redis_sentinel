@@ -1,5 +1,5 @@
 name          'KyleAnderson/redis_sentinel'
-version '0.0.3'
+version '0.0.4'
 source        'https://github.com/solarkennedy/puppet-redis_sentinel'
 author        'Kyle Anderson <kyle@xkyle.com>'
 license       'Apache License, Version 2.0'
