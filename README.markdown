@@ -57,7 +57,7 @@ redis_sentinel::monitor { $redis_servers:
 * Requires Redis to be installed via another module.
 * Not production tested!
 * Probably makes assumptions I'm not thinking about (open an issue!)
-* Currently runs as root :(
+* Only tested on ubuntu
 
 ##Requirements
 
