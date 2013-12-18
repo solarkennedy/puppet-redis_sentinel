@@ -12,7 +12,7 @@ class redis_sentinel::config {
   
   concat::fragment { 'sentinel_header': 
     target  => $redis_sentinel::config_file,
-    content => "#This file managed by the redis_sentinel puppet module\n",
+    content => "#This file managed by the redis_sentinel puppet module\ndaemonize yes\nlogfile /var/log/redis/redis-sentinel.log",
     order   => '01',
   }
 

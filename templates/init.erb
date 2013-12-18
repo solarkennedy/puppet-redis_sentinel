@@ -14,7 +14,7 @@
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=/usr/bin/redis-server
-DAEMON_ARGS= <%= scope.lookupvar('redis_sentinel::config_file') -%> --sentinel
+DAEMON_ARGS="<%= scope.lookupvar('redis_sentinel::config_file') -%> --sentinel"
 NAME=redis-sentinel
 DESC=redis-sentinel
 
