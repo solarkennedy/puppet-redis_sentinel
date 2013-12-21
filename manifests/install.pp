@@ -16,7 +16,7 @@ class redis_sentinel::install {
     'Debian': {
       file { '/etc/init/redis-sentinel.conf':
         ensure   => $redis_sentinel::ensure,
-        mode     => '0555',
+        mode     => '0444',
         owner    => 'root',
         group    => 'root',
         content => template('redis_sentinel/upstart.erb'),
