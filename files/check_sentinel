@@ -1,0 +1,128 @@
+#!/usr/bin/env ruby
+#
+# Nagios plugin to monitor Redis sentinel
+#
+# Checks general connectivity to a Redis sentinel server and will go critical
+# for any of the following conditions:
+#   * Inability to connect to the sentinel server
+#   * Sentinel reports it isn't monitoring any masters
+#   * Sentinel has entered TILT mode
+#
+# Arguments:
+# -H --host HOSTNAME to connect to (defaults to 127.0.0.1)
+# -p --port PORT to connect to (defaults to 26379)
+#
+# Author: Chris Boulton <chris@chrisboulton.com>
+# License: MIT (http://www.opensource.org/licenses/mit-license.php)
+#
+
+require 'socket'
+
+class TinyRedis
+  RN = "\r\n"
+
+  def initialize(host='localhost', port=6379)
+    @host = host
+    @port = port
+  end
+
+  def socket
+    @socket ||= TCPSocket.new(@host, @port)
+  end
+
+  def method_missing(method, *args)
+    args.unshift method
+    data = ["*#{args.size}", *args.map {|arg| "$#{arg.to_s.size}#{RN}#{arg}"}]
+    socket.write(data.join(RN) << RN)
+    parse_response
+  end
+
+  def info
+    method_missing(:info).lines.reject{|line| line !~ /:/}.inject({}) do |hash, kv|
+      key, *value = kv.strip.split(':')
+      value = value.join(':')
+      hash.merge!(key => value)
+    end
+  end
+
+  def parse_response
+    case socket.gets
+      when /^\+(.*)\r\n$/ then $1
+      when /^:(\d+)\r\n$/ then $1.to_i
+      when /^-(.*)\r\n$/  then raise "Redis error: #{$1}"
+      when /^\$([-\d]+)\r\n$/
+        $1.to_i >= 0 ? socket.read($1.to_i+2)[0..-3] : nil
+      when /^\*([-\d]+)\r\n$/
+        $1.to_i > 0 ? (1..$1.to_i).inject([]) { |a,_| a << parse_response } : nil
+    end
+  end
+
+  def close
+    socket.close
+  end
+end
+
+require 'optparse'
+
+STATES = {
+  :ok       => 0,
+  :warning  => 1,
+  :critical => 2,
+  :unknown  => 3,
+}
+
+options = {
+  :host    => '127.0.0.1',
+  :port    => 26379,
+  :timeout => 2,
+}
+
+$results     = []
+$exit_status = :ok
+
+def add_state(status, msg, should_exit = false)
+  $results.push(msg)
+  $exit_status = status if STATES[status] > STATES[$exit_status]
+  if should_exit
+    do_exit
+  end
+end
+
+def add_info(msg)
+  $results.push(msg)
+end
+
+def do_exit
+  puts "#{$exit_status.to_s.upcase} - #{$results.join('. ')}"
+  exit STATES[$exit_status]
+end
+
+optparse = OptionParser.new do |opts|
+  opts.on('-H', '--host HOST', 'Hostname') do |h|
+    options[:host] = h
+  end
+
+  opts.on('-p', '--port PORT', 'Port') do |p|
+    options[:port] = p.to_i
+  end
+end
+optparse.parse!
+
+begin
+  redis = TinyRedis.new(options[:host], options[:port])
+  info  = redis.info  p info
+  add_state(:critical, "Redis instance is not configured as a sentinel", true)  unless info['sentinel_masters']
+  add_state(:critical, "Sentinel has entered TILT mode", true) if info['sentinel_tilt'] != '0'
+
+  if info['sentinel_masters'] == '0'
+    add_state(:critical, "Sentinel is not monitoring any masters", true) 
+  else
+    add_info("Monitoring #{info['sentinel_masters']} masters")
+  end
+rescue Exception => e
+  add_state(:critical, e, true)
+ensure
+  redis.close
+end
+
+do_exit

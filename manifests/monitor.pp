@@ -7,9 +7,7 @@
 #
 # [*ensure*]
 #   Present or absent. Defaults to present.
-# 
-# ....
-# 
+#
 define redis_sentinel::monitor (
   $ensure                  = 'present',
   $host                    = $name,
@@ -20,12 +18,11 @@ define redis_sentinel::monitor (
   $can_failover            = 'yes',
   $parallel_syncs          = '5',
 ) {
-
-  include redis_sentinel
-  concat::fragment { "redis_sentinel_${name}":
-    ensure  => $ensure,
-    target  => $redis_sentinel::config_file,
-    content => template('redis_sentinel/monitor.erb'),
+  if $ensure == 'present' {
+    include redis_sentinel
+    concat::fragment { "redis_sentinel_${name}":
+      target  => $redis_sentinel::config_file,
+      content => template('redis_sentinel/monitor.erb')
+    }
   }
-
 }
