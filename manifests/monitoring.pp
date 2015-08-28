@@ -7,20 +7,20 @@ class redis_sentinel::monitoring ($checks_path = "/usr/local/bin") {
     owner  => "root",
     group  => "root",
     mode   => "0755",
-    source => "puppet:///modules/redis_sentinel/check_sentinel"
+    source => "puppet:///modules/${module_name}/check_sentinel"
   }
 
   file { "${checks_path}/check_sentinel_master":
     owner  => "root",
     group  => "root",
     mode   => "0755",
-    source => "puppet:///modules/redis_sentinel/check_sentinel_master"
+    source => "puppet:///modules/${module_name}/check_sentinel_master"
   }
 
   file { "${checks_path}/check_sentinel_master_health":
     owner  => "root",
     group  => "root",
     mode   => "0755",
-    source => "puppet:///modules/redis_sentinel/check_sentinel_master_health"
+    source => "puppet:///modules/${module_name}/check_sentinel_master_health"
   }
 }
