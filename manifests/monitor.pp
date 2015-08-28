@@ -22,7 +22,7 @@ define redis_sentinel::monitor (
     include redis_sentinel
     concat::fragment { "redis_sentinel_${name}":
       target  => $redis_sentinel::config_file,
-      content => template('redis_sentinel/monitor.erb')
+      content => template("${module_name}/monitor.erb")
     }
   }
 }

@@ -1,0 +1,30 @@
+#!/bin/sh
+# PROVIDE: redis-sentinel
+# REQUIRE: LOGIN
+# BEFORE:  securelevel
+# KEYWORD: shutdown
+
+# Add the following line to /etc/rc.conf to enable `redis_sentinel':
+#
+#redis_sentinel_enable="YES"
+#
+
+. /etc/rc.subr
+
+name="redis_sentinel"
+rcvar="${name}_enable"
+
+extra_commands="reload"
+
+command="/usr/local/bin/redis-sentinel"
+pidfile="/var/run/redis/redis-sentinel.pid"
+
+# read configuration and set defaults
+load_rc_config "$name"
+: ${redis_sentinel_enable="NO"}
+: ${redis_sentinel_user="root"}
+: ${redis_sentinel_config="<%= scope.lookupvar('redis_sentinel::config_file') -%>"}
+
+command_args="${redis_sentinel_config}"
+required_files="${redis_sentinel_config}"
+run_rc_command "$1"

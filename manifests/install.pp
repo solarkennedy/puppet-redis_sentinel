@@ -10,7 +10,7 @@ class redis_sentinel::install {
         mode     => '0555',
         owner    => 'root',
         group    => 'root',
-        content => template('redis_sentinel/init.erb'),
+        content => template("${module_name}/init.erb"),
       }
     }
     'Debian': {
@@ -19,7 +19,7 @@ class redis_sentinel::install {
         mode     => '0444',
         owner    => 'root',
         group    => 'root',
-        content => template('redis_sentinel/upstart.erb'),
+        content => template("${module_name}/upstart.erb"),
       }
       file { '/etc/init.d/redis-sentinel':
        ensure => 'link',
@@ -27,6 +27,15 @@ class redis_sentinel::install {
        force  => true,
       }
 
+    }
+    'FreeBSD': {
+      file { '/usr/local/etc/rc.d/redis-sentinel':
+        ensure   => $redis_sentinel::ensure,
+        mode     => '0555',
+        owner    => 'root',
+        group    => 'wheel',
+        content => template("${module_name}/rc.d.erb"),
+      }
     }
     default: { fail('Unknown OS') }
   } 
